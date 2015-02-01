@@ -1,0 +1,74 @@
+import QtQuick 2.4
+import io.thp.pyotherside 1.3
+
+Python {
+    id: keychain
+
+    signal opened
+    signal unlockFailed
+    signal unlocked
+    signal locked
+    signal itemsReceived(variant items)
+
+    signal open(string path)
+    signal unlock(string password)
+    signal lock
+    signal refresh
+
+    onOpen: {
+        call('keychain.open_keychain', [path])
+    }
+
+    onUnlock: {
+        call('keychain.unlock_keychain', [password])
+    }
+
+    onLock: {
+        call('keychain.lock_keychain', [])
+    }
+
+    onRefresh: {
+        call('keychain.get_all_items', [])
+    }
+
+    onError: console.log(traceback)
+
+    onReceived: {
+        console.log('received data')
+        console.log(data)
+    }
+
+    Component.onCompleted: {
+        addImportPath('file:///home/niko/Dev/crikey/CriKey/py')
+        addImportPath('file:///home/niko/Dev/crikey/CriKey/py/lib')
+
+        importModule('keychain', function() {
+            console.log('Module imported')
+        })
+
+        setHandler('keychainOpened', function() {
+            console.log('keychainOpened received')
+            keychain.opened()
+        })
+
+        setHandler('keychainUnlocked', function() {
+            console.log('keychainUnlocked received')
+            keychain.unlocked()
+        })
+
+        setHandler('keychainLocked', function() {
+            console.log('keychainLocked received')
+            keychain.locked()
+        })
+
+        setHandler('keychainUnlockFailed', function() {
+            console.log('keychainUnlockFailed received')
+            keychain.unlockFailed()
+        })
+
+        setHandler('keychainItems', function(items) {
+            console.log('keychainItems received')
+            keychain.itemsReceived(items)
+        })
+    }
+}

@@ -3,5 +3,8 @@
         <file>main.qml</file>
         <file>LockScreen.qml</file>
         <file>QuickLockButton.qml</file>
+        <file>Keychain.qml</file>
+        <file>KeychainItemsListView.qml</file>
+        <file>KeychainItemView.qml</file>
     </qresource>
 </RCC>

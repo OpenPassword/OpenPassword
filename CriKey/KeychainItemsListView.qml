@@ -8,6 +8,11 @@ ListView {
     highlightMoveDuration: 0
     keyNavigationWraps: true
 
+    signal reset
+    onReset: {
+        itemList.currentIndexChanged()
+    }
+
     Keys.onUpPressed: {
         keychainItemsListView.decrementCurrentIndex()
     }
@@ -15,11 +20,6 @@ ListView {
     Keys.onDownPressed: {
         keychainItemsListView.incrementCurrentIndex()
     }
-
-//    ScrollBar {
-//        flickable: itemList
-//        vertical: true
-//    }
 
     delegate: Component {
         id: itemDelegate

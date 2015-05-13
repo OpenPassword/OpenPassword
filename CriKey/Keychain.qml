@@ -8,12 +8,16 @@ Python {
     signal unlockFailed
     signal unlocked
     signal locked
-    signal itemsReceived(variant items)
+    signal itemsReceived(var items)
+    signal categoriesReceived(var categories)
+    signal foldersReceived(var folders)
+    signal tagsReceived(var tags)
 
     signal open(string path)
     signal unlock(string password)
     signal lock
     signal refresh
+    signal search(string query)
 
     onOpen: {
         call('keychain.open_keychain', [path])
@@ -28,7 +32,14 @@ Python {
     }
 
     onRefresh: {
+        call('keychain.get_categories', [])
+        call('keychain.get_folders', [])
+        call('keychain.get_tags', [])
         call('keychain.get_all_items', [])
+    }
+
+    onSearch: {
+        call('keychain.search', [query])
     }
 
     onError: console.log(traceback)
@@ -69,6 +80,21 @@ Python {
         setHandler('keychainItems', function(items) {
             console.log('keychainItems received')
             keychain.itemsReceived(items)
+        })
+
+        setHandler('categories', function(categories) {
+            console.log('categories received')
+            keychain.categoriesReceived(categories)
+        })
+
+        setHandler('folders', function(folders) {
+            console.log('folders received')
+            keychain.foldersReceived(folders)
+        })
+
+        setHandler('tags', function(tags) {
+            console.log('tags received')
+            keychain.tagsReceived(tags)
         })
     }
 }
